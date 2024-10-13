@@ -1,6 +1,6 @@
-discord.py==1.7.3
-langchain==0.0.134
-langchain-community==0.0.5
-ollama==0.1.3
-pdfminer.six==20201018
-pydantic==1.10.2
+discord.py
+langchain
+langchain-community
+ollama
+pdfminer.six
+pydantic
