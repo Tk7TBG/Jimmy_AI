@@ -6,6 +6,9 @@ from responses import get_response
 
 from discord.ext.commands import Bot
 
+import asyncio
+
+
 # Step 0 load our token from somewhere safe
 load_dotenv()
 TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
@@ -28,7 +31,9 @@ async def send_message(message: Message, user_message: str) -> None:
         user_message = user_message[1:]
 
     try:
-         async with message.channel.typing():  # Show typing indicator
+        async with message.channel.typing():  # Show typing indicator
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(None, get_response, user_message)
             response: str = get_response(user_message)
             await message.author.send(response) if is_private else await message.channel.send(response)
     except Exception as e:
