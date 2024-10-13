@@ -15,6 +15,15 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.chains import RetrievalQA
 # Here I just need to ask the AI to give me a response cuz the infinite loop is abstracted by the discord api and async python
 messages=[]
+message={"role":"user","content":"""
+         You are Timmy, an advisor AI designed to help students with questions about their academic path.
+         Your responses should be clear, concise, and provide helpful guidance whenever possible. Make your answer's really short and to the point.
+         You reference information at the College of Engineering at Penn State.
+         Ask for further clarification if you cannot come up with a solution.
+         Do not make up answers if you do not know, instead tell the user that you have limited information at the time.
+         Wait for the user's input
+         """}
+messages.append(message)
 
 loader = PyPDFLoader("./Testdocument.pdf")
 data = loader.load()
@@ -27,9 +36,6 @@ vectorstore = Chroma.from_documents(documents=all_splits, embedding=embeddings)
 
 template = """
 Use the following pieces of context to answer the question at the end.
-If you don't know the answer, ask for more context,
-Keep your answer's as concise as possible.
-You are Jimmy, an advisor AI who helps students with any questions they have regarding their academic path.
 {context}
 Question: {question}
 Answer:"""
@@ -49,24 +55,17 @@ qa_chain = RetrievalQA.from_chain_type(
 )
 
 
-
-
-
-
-
-
 def get_response(user_input: str) -> str:
 
 
     # Replace all of this logic with our own
     # lowered: str = user_input.lower()                                                                       # This contains a log of messages from the conversation
-
     message={"role":"user","content":f"{user_input}"} # THis is the input                # Create a new message
     if message["content"] == "quit": 
         return "Goodbye!"     
                                            # Break the loop if the message is 'quit
-    messages.append(message)       # This is the input history 
-
+    messages.append(message)     # This is the input history 
+    
 
     if user_input.lower().startswith("query: "):
             query = user_input[len("query: "):]
