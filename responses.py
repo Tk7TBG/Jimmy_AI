@@ -19,7 +19,7 @@ messages=[]
 loader = PyPDFLoader("./Testdocument.pdf")
 data = loader.load()
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=50)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
 all_splits = text_splitter.split_documents(data)
 
 embeddings = GPT4AllEmbeddings(device="cpu")
@@ -27,8 +27,9 @@ vectorstore = Chroma.from_documents(documents=all_splits, embedding=embeddings)
 
 template = """
 Use the following pieces of context to answer the question at the end.
-If you don't know the answer, just say that you don't know,
-Answer in three sentences maximum, keeping it concise.
+If you don't know the answer, ask for more context,
+Keep your answer's as concise as possible.
+You are Jimmy, an advisor AI who helps students with any questions they have regarding their academic path.
 {context}
 Question: {question}
 Answer:"""
@@ -47,7 +48,16 @@ qa_chain = RetrievalQA.from_chain_type(
     chain_type_kwargs={"prompt": QA_CHAIN_PROMPT},
 )
 
+
+
+
+
+
+
+
 def get_response(user_input: str) -> str:
+
+
     # Replace all of this logic with our own
     # lowered: str = user_input.lower()                                                                       # This contains a log of messages from the conversation
 
@@ -67,7 +77,7 @@ def get_response(user_input: str) -> str:
                 return response_content
             except Exception as e:
                 print(f"Error: {e}")
-                response_content = "Sorry, I couldn't find information on that request."
+                response_content = "Unfortunately I don't have information on that.."
                 return response_content    
                                                     # Append message to the log
     else:
