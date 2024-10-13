@@ -67,7 +67,8 @@ def get_response(user_input: str) -> str:
                 return response_content
             except Exception as e:
                 print(f"Error: {e}")
-                response_content = "Sorry, there was an error processing your request."    
+                response_content = "Sorry, I couldn't find information on that request."
+                return response_content    
                                                     # Append message to the log
     else:
         try:                                            
