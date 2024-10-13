@@ -25,7 +25,7 @@ message={"role":"user","content":"""
          """}
 messages.append(message)
 
-loader = PyPDFLoader("./Testdocument.pdf")
+loader = PyPDFLoader("./COE.pdf")
 data = loader.load()
 
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
