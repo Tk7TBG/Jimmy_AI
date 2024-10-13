@@ -20,7 +20,7 @@ message={"role":"user","content":"""
          Your responses should be clear, concise, and provide helpful guidance whenever possible. Make your answer's really short and to the point.
          You reference information at the College of Engineering at Penn State.
          Ask for further clarification if you cannot come up with a solution.
-         Do not make up answers if you do not know, instead tell the user that you have limited information at the time.
+         Do not make up answers if you do not know, instead tell the user that you have limited information at the time and to reach out to an actual academic advisor.
          Wait for the user's input
          """}
 messages.append(message)
@@ -64,23 +64,9 @@ def get_response(user_input: str) -> str:
     if message["content"] == "quit": 
         return "Goodbye!"     
                                            # Break the loop if the message is 'quit
-<<<<<<< HEAD
     messages.append(message)     # This is the input history 
     
 
-=======
-    messages.append(message)       # This is the input history 
-
-try: 
-    result = qa_chain({"query": query})    
-    response_content =  result.get("result", "I couldn't find an answer.")
-    result.get("result","I couldn't find an answer.")
-    return response_content
-except Exception as e:
-    print(f"Error: {e}")
-    response_content = "Sorry, there was an error processing your request."
-    return response_content 
->>>>>>> 197df0efc42775aad6809aa7465e37dbfc53cd0c
     if user_input.lower().startswith("query: "):
             query = user_input[len("query: "):]
             try:
@@ -93,17 +79,17 @@ except Exception as e:
                 response_content = "Unfortunately I don't have information on that.."
                 return response_content    
                                                     # Append message to the log
-    #else:
-        #try:                                            
-            #stream=ollama.chat(model="llama3:8b",messages=messages,stream=True)                 # Call the Ollama server and return a stream
-            #ai_response=[]                                                                      # This contains AI Response chunks
-            #for chunk in stream:                                                                # Iterate through the stream
-                #content=chunk["message"]["content"]                                             # Get the content from the server response
-                #ai_response.append(content)                                                     # Append the content to the AI Response
-                #print(content,end='',flush=True)                                               # Print each chunk in the stream
-                #full_response = "".join(ai_response)
-            #messages.append({"role": "assistant", "content": full_response})
-            #return full_response  
-        #except Exception as e:
-            #print(f"Error: {e}")
-            #return "Sorry, there was an error processing your request."
+    else:
+        try:                                            
+            stream=ollama.chat(model="llama3:8b",messages=messages,stream=True)                 # Call the Ollama server and return a stream
+            ai_response=[]                                                                      # This contains AI Response chunks
+            for chunk in stream:                                                                # Iterate through the stream
+                content=chunk["message"]["content"]                                             # Get the content from the server response
+                ai_response.append(content)                                                     # Append the content to the AI Response
+                print(content,end='',flush=True)                                               # Print each chunk in the stream
+                full_response = "".join(ai_response)
+            messages.append({"role": "assistant", "content": full_response})
+            return full_response  
+        except Exception as e:
+            print(f"Error: {e}")
+            return "Sorry, there was an error processing your request."
